@@ -10,3 +10,9 @@ Update paths on load balancer to point at the backend Cloud Run service:
 /js/script.js
 /api/event
 ```
+
+Then add code to your site's `<head>`
+ 
+```
+<script defer data-domain="freud2lacan.com" src="/js/script.js"></script>
+```

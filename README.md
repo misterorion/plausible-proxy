@@ -14,5 +14,5 @@ Update paths on load balancer to point at the backend Cloud Run service:
 Then add code to your site's `<head>`
  
 ```
-<script defer data-domain="freud2lacan.com" src="/js/script.js"></script>
+<script defer data-domain="mysite.com" src="/js/script.js"></script>
 ```

@@ -13,7 +13,7 @@ steps:
   # Push the Caddy Docker iamge
   - name: gcr.io/cloud-builders/docker
     id: Push Caddy image
-    args: 
+    args:
       - push
       - $_APP_REPO/$_SERVICE_NAME:$_ENVIRONMENT
   # Update Cloud Run service

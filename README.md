@@ -2,9 +2,9 @@
 
 Service to reverse proxy analytics to plausible.io
 
-Builds and runs on Google Cloud.
+Builds with Cloud Build and deploys to Cloud Run.
 
-Add the paths below to your load balancer and set them to point at the Cloud Run backend:
+Add the paths below to your load balancer and set them to point at the Cloud Run NEG:
 
 ```
 /js/script.js

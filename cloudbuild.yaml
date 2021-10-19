@@ -6,8 +6,8 @@ steps:
     args:
       - -c
       - |
-        build --build-arg caddy_image=$_CADDY_IMAGE -t $_APP_IMAGE .
-        push $_APP_IMAGE
+        docker build --build-arg caddy_image=$_CADDY_IMAGE -t $_APP_IMAGE .
+        docker push $_APP_IMAGE
   # Update Cloud Run service
   - name: gcr.io/cloud-builders/gcloud
     id: Update Cloud Run service
@@ -15,4 +15,4 @@ steps:
     args:
       - -c
       - |
-        run services update $_SERVICE --platform=managed --image=$_APP_IMAGE --region=$_REGION --async
+        gcloud run services update $_SERVICE --platform=managed --image=$_APP_IMAGE --region=$_REGION --async

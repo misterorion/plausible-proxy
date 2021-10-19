@@ -2,6 +2,7 @@ steps:
   # Build and push App image
   - name: gcr.io/cloud-builders/docker
     id: Build Caddy image
+    entrypoint: sh
     args:
       - -c
       - |
@@ -10,7 +11,7 @@ steps:
   # Update Cloud Run service
   - name: gcr.io/cloud-builders/gcloud
     id: Update Cloud Run service
-    entrypoint: gcloud
+    entrypoint: sh
     args:
       - -c
       - |

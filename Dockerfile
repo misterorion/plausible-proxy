@@ -1,3 +1,3 @@
-ARG caddy_image
-FROM $caddy_image
+ARG CADDY_IMAGE
+FROM $CADDY_IMAGE
 COPY Caddyfile /etc/caddy/Caddyfile

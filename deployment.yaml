@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: plausible
-        image: us-central1-docker.pkg.dev/mechapower/apps/plausible:latest
+        image: us-central1-docker.pkg.dev/mechapower/apps/plausible
         resources:
           limits:
             cpu: 50m

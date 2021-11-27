@@ -15,15 +15,17 @@ spec:
       labels:
         app: plausible
     spec:
+      nodeSelector:
+        cloud.google.com/gke-spot: "true"
       containers:
       - name: plausible
-        image: us-central1-docker.pkg.dev/mechapower/apps/plausible
+        image: us-central1-docker.pkg.dev/mechapower/apps/plausible:8e56726
         resources:
           limits:
             memory: 24Mi
           requests:
-            cpu: 10m
-            memory: 8Mi
+            cpu: 5m
+            memory: 6Mi
         readinessProbe:
           httpGet:
             path: /healthz

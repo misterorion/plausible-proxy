@@ -44,20 +44,6 @@ steps:
     volumes:
       - name: ssh
         path: /root/.ssh
-  - id: Cache node_modules
-    name: gcr.io/cloud-builders/gcloud
-    entrypoint: sh
-    args:
-      - -c
-      - |
-        (
-          set -e
-          test ! -f cache.tar.gz
-          tar -zcf cache.tar.gz node_modules public .cache
-          gsutil -m cp cache.tar.gz "gs://$_CACHE_BUCKET/$(cat hashed.yarn-lock)"
-        ) || true
-    waitFor:
-      - Yarn build
 availableSecrets:
   secretManager:
     - versionName: projects/$_PROJECT/secrets/$_SECRET_KEY/versions/latest

@@ -1,7 +1,9 @@
 {
 	admin off
+	http_port 8080
+	auto_https off
 }
-:80
+:8080
 respond /healthz 200
 @plausible path /js/script.js /api/event
 handle @plausible {

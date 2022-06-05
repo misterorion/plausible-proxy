@@ -31,6 +31,8 @@ func ProxyPlausible(w http.ResponseWriter, r *http.Request) {
 		req.Header.Add("X-Forwarded-Proto", req.Proto)
 		req.Header.Add("X-Forwarded-Host", req.Host)
 	}
+	fwdAddress := r.Header.Get("X-Forwarded-For")
+	log.Printf("X-Forwarded-For: %s", fwdAddress)
 	proxy.ServeHTTP(w, r)
 }
 

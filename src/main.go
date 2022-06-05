@@ -1,4 +1,4 @@
-// Credit to https://github.com/mtlynch/plausible-proxy
+// Credit to https://github.com/mtlynch/plausible-proxy for most of this.
 package proxy
 
 import (
@@ -22,6 +22,20 @@ func ProxyPlausible(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Parse X-Forwarded-For
+	ipAddress := r.RemoteAddr
+	fwdAddress := r.Header.Get("X-Forwarded-For")
+	log.Printf("Logging r.RemoteAddr: %s", ipAddress)
+	log.Printf("Logging X-Forwarded-For: %s", fwdAddress)
+	if fwdAddress != "" {
+		ipAddress = fwdAddress
+		ips := strings.Split(fwdAddress, ", ")
+		if len(ips) > 1 {
+			ipAddress = ips[0]
+		}
+	}
+	log.Printf("Parsed IP: %s", ipAddress)
+
 	proxy := httputil.NewSingleHostReverseProxy(targetURL)
 	proxy.Director = func(req *http.Request) {
 		req.URL = targetURL
@@ -30,10 +44,9 @@ func ProxyPlausible(w http.ResponseWriter, r *http.Request) {
 
 		req.Header.Add("X-Forwarded-Proto", req.Proto)
 		req.Header.Add("X-Forwarded-Host", req.Host)
+		req.Header.Set("X-Forwarded-For", ipAddress)
 	}
-	fwdAddress := r.Header.Get("X-Forwarded-For")
-	fwdAddressSplit := strings.Split(fwdAddress, ",")
-	log.Printf("X-Forwarded-For: %s", fwdAddressSplit[0])
+
 	proxy.ServeHTTP(w, r)
 }
 

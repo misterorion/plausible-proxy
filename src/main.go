@@ -23,18 +23,15 @@ func ProxyPlausible(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Parse X-Forwarded-For
-	ipAddress := r.RemoteAddr
 	fwdAddress := r.Header.Get("X-Forwarded-For")
-	log.Printf("Logging r.RemoteAddr: %s", ipAddress)
 	log.Printf("Logging X-Forwarded-For: %s", fwdAddress)
 	if fwdAddress != "" {
-		ipAddress = fwdAddress
 		ips := strings.Split(fwdAddress, ", ")
 		if len(ips) > 1 {
-			ipAddress = ips[0]
+			ipAddress := ips[0]
+			log.Printf("Logging Parsed IP: %s", ipAddress)
 		}
 	}
-	log.Printf("Parsed IP: %s", ipAddress)
 
 	proxy := httputil.NewSingleHostReverseProxy(targetURL)
 	proxy.Director = func(req *http.Request) {
@@ -44,7 +41,7 @@ func ProxyPlausible(w http.ResponseWriter, r *http.Request) {
 
 		req.Header.Add("X-Forwarded-Proto", req.Proto)
 		req.Header.Add("X-Forwarded-Host", req.Host)
-		req.Header.Set("X-Forwarded-For", ipAddress)
+		// req.Header.Set("X-Forwarded-For", ipAddress)
 	}
 
 	proxy.ServeHTTP(w, r)

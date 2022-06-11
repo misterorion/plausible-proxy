@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-var targetURL = parseUrl("https://plausible.io")
+var targetURL = parseURL("https://plausible.io")
 
 func ProxyPlausible(w http.ResponseWriter, r *http.Request) {
 	canonicalPath, err := canonicalizePath(r.URL.Path)
@@ -46,7 +46,7 @@ func canonicalizePath(path string) (string, error) {
 	return "", errors.New("unsupported path")
 }
 
-func parseUrl(u string) *url.URL {
+func parseURL(u string) *url.URL {
 	parsed, err := url.Parse(u)
 	if err != nil {
 		log.Printf("failed to parse URL %s", u)

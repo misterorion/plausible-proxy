@@ -5,4 +5,5 @@ steps:
       - functions
       - deploy
       - $_FUNCTION_NAME
+      - --trigger-http
     dir: src

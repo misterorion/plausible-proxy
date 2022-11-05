@@ -5,5 +5,5 @@ steps:
       - functions
       - deploy
       - $_FUNCTION_NAME
-      - --trigger-http
+      - --gen2
     dir: src

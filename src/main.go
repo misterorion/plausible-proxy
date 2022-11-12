@@ -1,4 +1,3 @@
-// Credit to https://github.com/mtlynch/plausible-proxy for most of this.
 package proxy
 
 import (
@@ -8,14 +7,28 @@ import (
 	"net/http/httputil"
 	"net/url"
 	"strings"
+
+	"github.com/GoogleCloudPlatform/functions-framework-go/functions"
 )
 
 var targetURL = parseURL("https://plausible.io")
 
-func ProxyPlausible(w http.ResponseWriter, r *http.Request) {
-	canonicalPath, err := canonicalizePath(r.URL.Path)
+var mappings = map[string]string{
+	"/api/event":       "/api/event",
+	"/js/plausible.js": "/js/plausible.js",
+	"/js/script.js":    "/js/plausible.js",
+}
+
+// init registers the function target and handler
+func init() {
+	functions.HTTP("PlausibleProxy", plausibleProxy)
+}
+
+// plausibleProxy sends request data to plausible.io
+func plausibleProxy(rw http.ResponseWriter, req *http.Request) {
+	canonicalPath, err := canonicalizePath(req.URL.Path)
 	if err != nil {
-		http.Error(w, "Unsupported path", http.StatusNotFound)
+		http.Error(rw, "Unsupported path", http.StatusNotFound)
 		return
 	}
 
@@ -29,15 +42,11 @@ func ProxyPlausible(w http.ResponseWriter, r *http.Request) {
 		req.Header.Add("X-Forwarded-Host", req.Host)
 	}
 
-	proxy.ServeHTTP(w, r)
+	proxy.ServeHTTP(rw, req)
 }
 
+// canonicalizePath returns a path string mapped to an input path string
 func canonicalizePath(path string) (string, error) {
-	mappings := map[string]string{
-		"/api/event":       "/api/event",
-		"/js/plausible.js": "/js/plausible.js",
-		"/js/script.js":    "/js/plausible.js",
-	}
 	for k, v := range mappings {
 		if strings.HasSuffix(path, k) {
 			return v, nil
@@ -46,6 +55,7 @@ func canonicalizePath(path string) (string, error) {
 	return "", errors.New("unsupported path")
 }
 
+// parseURL returns a URL structure and panics if there is an error
 func parseURL(u string) *url.URL {
 	parsed, err := url.Parse(u)
 	if err != nil {

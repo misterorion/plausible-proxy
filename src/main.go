@@ -19,7 +19,7 @@ var mappings = map[string]string{
 	"/js/script.js":    "/js/plausible.js",
 }
 
-// init registers the function target and handler
+// init registers the function target (entry point) and handler
 func init() {
 	functions.HTTP("PlausibleProxy", plausibleProxy)
 }

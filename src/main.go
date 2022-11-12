@@ -21,7 +21,7 @@ var mappings = map[string]string{
 
 // init registers the function target and handler
 func init() {
-	functions.HTTP("PlausibleProxy", plausibleProxy)
+	functions.HTTP("plausibleProxy", plausibleProxy)
 }
 
 // plausibleProxy sends request data to plausible.io
